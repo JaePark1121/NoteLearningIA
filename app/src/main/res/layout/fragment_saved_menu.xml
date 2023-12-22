@@ -11,7 +11,7 @@
     <EditText
         android:id="@+id/audio_menu_box"
         android:layout_width="161dp"
-        android:layout_height="180dp"
+        android:layout_height="120dp"
 
         android:background="@drawable/memo_border"
         android:ems="10"
@@ -22,41 +22,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
-
-    <ImageView
-        android:id="@+id/vocabList_icon"
-        android:layout_width="39dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="23dp"
-        android:src="@drawable/book"
-        app:layout_constraintStart_toStartOf="@+id/audio_menu_box"
-        app:layout_constraintTop_toTopOf="@+id/audio_menu_box" />
-
-    <TextView
-        android:id="@+id/vocabList_label"
-        android:layout_width="81dp"
-        android:layout_height="22dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:text="Vocab List"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/vocabList_icon"
-        app:layout_constraintTop_toTopOf="@+id/audio_menu_box" />
-
-    <TextView
-        android:id="@+id/summary_label"
-        android:layout_width="81dp"
-        android:layout_height="22dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="36dp"
-        android:text="Summary"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/summary_icon"
-        app:layout_constraintTop_toBottomOf="@+id/vocabList_label" />
 
     <TextView
         android:id="@+id/delete_label"
@@ -76,34 +41,13 @@
         android:id="@+id/delete_icon"
         android:layout_width="41dp"
         android:layout_height="39dp"
-        android:layout_marginStart="11dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/delete"
 
 
         app:layout_constraintStart_toStartOf="@+id/audio_menu_box"
         app:layout_constraintTop_toBottomOf="@+id/summary_icon" />
-
-    <ImageView
-        android:id="@+id/summary_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/exam"
-        app:layout_constraintStart_toStartOf="@+id/audio_menu_box"
-        app:layout_constraintTop_toBottomOf="@+id/vocabList_icon" />
-
-    <Button
-        android:id="@+id/vocab_button"
-        android:layout_width="160dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="15dp"
-
-        android:background="#00FFFFFF"
-        app:layout_constraintEnd_toEndOf="@+id/audio_menu_box"
-        app:layout_constraintStart_toStartOf="@+id/audio_menu_box"
-        app:layout_constraintTop_toTopOf="@+id/audio_menu_box" />
 
     <Button
         android:id="@+id/summary_button"
@@ -112,9 +56,32 @@
 
         android:background="#00FFFFFF"
         app:layout_constraintEnd_toEndOf="@+id/audio_menu_box"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/audio_menu_box"
-        app:layout_constraintTop_toBottomOf="@+id/vocab_button" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/summary_label"
+        android:layout_width="81dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:text="Summary"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/summary_icon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/summary_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/exam"
+        app:layout_constraintStart_toStartOf="@+id/audio_menu_box"
+        app:layout_constraintTop_toTopOf="@+id/summary_button" />
 
     <Button
         android:id="@+id/delete_button"

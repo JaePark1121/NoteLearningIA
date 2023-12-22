@@ -1,6 +1,6 @@
 package com.example.notelearning;
 
-import static com.example.notelearning.MainActivity.newFragment;
+import static com.example.notelearning.MainActivity.addTabFragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,7 +37,7 @@ public class AddTabFragment extends Fragment {
                 else{
                     Toast.makeText(getActivity(), "Tab Name cannot be blank", Toast.LENGTH_SHORT).show();
                 }
-                getActivity().getSupportFragmentManager().beginTransaction().remove(newFragment).commitAllowingStateLoss();
+                getActivity().getSupportFragmentManager().beginTransaction().remove(addTabFragment).commitAllowingStateLoss();
 
 
             }
@@ -46,7 +46,7 @@ public class AddTabFragment extends Fragment {
         v.findViewById(R.id.new_tab_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().remove(newFragment).commitAllowingStateLoss();
+                getActivity().getSupportFragmentManager().beginTransaction().remove(addTabFragment).commitAllowingStateLoss();
             }
         });
 

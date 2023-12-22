@@ -1,9 +1,6 @@
 package com.example.notelearning;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,21 +23,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.Scanner;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 
@@ -71,12 +57,6 @@ public class SaveAudioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save_audio_file);
 
-
-      /*
-        Intent myIntent = getIntent();
-        String content = myIntent.getStringExtra("content");
-        String title = myIntent.getStringExtra("title");
-*/
 
 
         TextView save = (TextView) findViewById(R.id.save_button);
@@ -132,7 +112,7 @@ public class SaveAudioActivity extends AppCompatActivity {
                     //Is this right?
                     newMemoKey = memoId.get(0);
                 } else {
-                    Memos newMemo = new Memos(date, title, content, false, "", null);
+                    Memos newMemo = new Memos(date, title, content, false);
                     memoReference = mDatabase.child("Users").child(uid).child("folder").child(MainActivity.curTab).child("memos").push();
                     newMemoKey = memoReference.getKey();
                     System.out.println();
@@ -178,26 +158,7 @@ public class SaveAudioActivity extends AppCompatActivity {
                 // AnyViewLayout은 현재 메인 Layout에 있는 View중 아무거나 가져오면 됨, 토큰용
                 popupWindow.showAtLocation(menu, Gravity.CENTER, 300, -550);
 
-                Button vocab = (Button) popupView.findViewById(R.id.vocab_button);
-                vocab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showVocabChoiceDialog();
 
-                    }
-                });
-
-
-                Button summary = (Button) popupView.findViewById(R.id.summary_button);
-                summary.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-
-                        showSummaryChoiceDialog();
-                    }
-
-                });
 
                 Button delete = (Button) popupView.findViewById(R.id.delete_button);
                 delete.setOnClickListener(new View.OnClickListener() {
@@ -301,260 +262,7 @@ public class SaveAudioActivity extends AppCompatActivity {
         });
     }
 
-        private void showSummaryChoiceDialog () {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(SaveAudioActivity.this); // Note the change here
-            builder.setTitle("Summary Options");
-
-            // Set up the buttons
-            builder.setPositiveButton("View Existing", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(getApplicationContext(), SummaryActivity.class);
-                    intent.putExtra("mode_summary", "old_summary");
-                    intent.putExtra("mode_summary_save", "old_summary_save");
-                    intent.putStringArrayListExtra("memoID", memoId);
-
-                    startActivity(intent);
-                }
-            });
-
-            builder.setNegativeButton("Create New", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    HttpURLConnection httpConn = null;
-                    String response = "Error";
-
-                    try {
-                        URL url = new URL("https://api.openai.com/v1/chat/completions");
-
-                        httpConn = (HttpURLConnection) url.openConnection();
-                        httpConn.setRequestMethod("POST");
-                        httpConn.setRequestProperty("Content-Type", "application/json");
-                        httpConn.setRequestProperty("Authorization", "Bearer " + "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");
-                        httpConn.setRequestProperty("OpenAI-Organization", "org-EXTJqre865s2Io0thmu6CYHX");
-                        httpConn.setDoOutput(true);
-
-                        String message = "Summarize this:" + contentView.getText().toString();
-                        JSONObject payload = new JSONObject();
-
-                        payload.put("model", "gpt-3.5-turbo");
-
-                        JSONArray messagesArray = new JSONArray();
-                        JSONObject messageObject = new JSONObject();
-                        messageObject.put("role", "user");
-                        messageObject.put("content", message);
-
-                        messagesArray.put(messageObject);
-                        payload.put("messages", messagesArray);
-
-                        OutputStreamWriter writer = new OutputStreamWriter(httpConn.getOutputStream());
-                        writer.write(payload.toString());
-                        writer.flush();
-                        writer.close();
-
-                        int responseCode = httpConn.getResponseCode();
-                        //System.out.println("Response Code: " + responseCode);
-
-                        InputStream responseStream = responseCode / 100 == 2 ? httpConn.getInputStream() : httpConn.getErrorStream();
-                        Scanner s = new Scanner(responseStream).useDelimiter("\\A");
-
-                        response = s.hasNext() ? s.next() : "";
-                        System.out.println("My response:" + response);
-
-                        s.close();
-                        responseStream.close();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        JSONObject jsonResponse = new JSONObject(response);
-                        JSONArray choicesArray = jsonResponse.getJSONArray("choices");
-
-                        if (choicesArray.length() > 0) {
-                            JSONObject firstChoice = choicesArray.getJSONObject(0);
-                            if (firstChoice.has("message")) {
-                                JSONObject messageObject = firstChoice.getJSONObject("message");
-                                String content = messageObject.getString("content");
-
-                                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("latestMemoKey", newMemoKey);
-                                editor.apply();
-
-
-                                Intent intent = new Intent(getApplicationContext(), SummaryActivity.class);
-                                intent.putExtra("mode_summary", "new_summary");
-                                intent.putStringArrayListExtra("memoID", memoId);
-                                intent.putExtra("content", content);
-                                startActivity(intent);
-                            } else {
-                                System.out.println("The 'message' object is not found.");
-                            }
-                        } else {
-                            System.out.println("The 'choices' array is empty.");
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        System.out.println("Error parsing the JSON response.");
-                    }
-                }
-            });
-
-
-                }
-            });
-
-
-            builder.show();
-        }
-
-
-        private void showVocabChoiceDialog () {
-            AlertDialog.Builder builder = new AlertDialog.Builder(SaveAudioActivity.this); // Note the change here
-            builder.setTitle("Vocab List Options");
-
-            // Set up the buttons
-            builder.setPositiveButton("View Existing", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(getApplicationContext(), VocabListActivity.class);
-                    intent.putExtra("mode_vocab", "old_list");
-                    intent.putExtra("mode_vocab_save", "old_list_save");
-
-                    startActivity(intent);
-                }
-            });
-            builder.setNegativeButton("Create New", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    AsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            HttpURLConnection httpConn = null;
-                            String response = "Error";
-
-                            try {
-                                URL url = new URL("https://api.openai.com/v1/chat/completions");
-
-                                httpConn = (HttpURLConnection) url.openConnection();
-                                httpConn.setRequestMethod("POST");
-                                httpConn.setRequestProperty("Content-Type", "application/json");
-                                httpConn.setRequestProperty("Authorization", "Bearer " + "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");
-                                httpConn.setRequestProperty("OpenAI-Organization", "org-EXTJqre865s2Io0thmu6CYHX");
-                                httpConn.setDoOutput(true);
-
-                                String message = "Make a short vocab list of 5 words from this note, separate the word and the " +
-                                        "definition with a colon and only use the colon once, don't number each word and don't " +
-                                        "output anything else but the words and definitions. The vocab word you choose shouldn't " +
-                                        "be a phrase but should be a single word or a single term and don't use articles. Strictly respond in this" +
-                                        "format 'Apple: A fruit.' This is the note:" + contentView.getText().toString();
-                                JSONObject payload = new JSONObject();
-
-                                payload.put("model", "gpt-3.5-turbo");
-
-                                JSONArray messagesArray = new JSONArray();
-                                JSONObject messageObject = new JSONObject();
-                                messageObject.put("role", "user");
-                                messageObject.put("content", message);
-
-                                messagesArray.put(messageObject);
-                                payload.put("messages", messagesArray);
-
-                                OutputStreamWriter writer = new OutputStreamWriter(httpConn.getOutputStream());
-                                writer.write(payload.toString());
-                                writer.flush();
-                                writer.close();
-
-                                int responseCode = httpConn.getResponseCode();
-                                System.out.println("Response Code: " + responseCode);
-
-                                InputStream responseStream = responseCode / 100 == 2 ? httpConn.getInputStream() : httpConn.getErrorStream();
-                                Scanner s = new Scanner(responseStream).useDelimiter("\\A");
-
-                                response = s.hasNext() ? s.next() : "";
-                                System.out.println(response);
-
-                                s.close();
-                                responseStream.close();
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            try {
-                                JSONObject jsonResponse = new JSONObject(response);
-                                JSONArray choicesArray = jsonResponse.getJSONArray("choices");
-
-                                if (choicesArray.length() > 0) {
-                                    JSONObject firstChoice = choicesArray.getJSONObject(0);
-                                    if (firstChoice.has("message")) {
-                                        JSONObject messageObject = firstChoice.getJSONObject("message");
-                                        String content = messageObject.getString("content");
-                                        System.out.println(content);
-
-
-                                        String[] entries = content.split("\n"); // Split by \n
-
-                                        for (String entry : entries) {
-                                            String[] parts = entry.split(":"); // Split each entry by colon
-
-                                            System.out.println("Parts: " + entry);
-
-                                            if (parts.length == 2) {
-                                                words.add(parts[0].trim());
-                                                definitions.add(parts[1].trim());
-                                            }
-                                        }
-
-                                    } else {
-                                        System.out.println("The 'message' object is not found.");
-                                    }
-                                } else {
-                                    System.out.println("The 'choices' array is empty.");
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                System.out.println("Error parsing the JSON response.");
-                            }
-                            onTaskComplete();
-                        }
-                    });
-
-
-                }
-            });
-
-
-            builder.show();
-        }
-
-
-    private void onTaskComplete() {
-        for (int i = 0; i < definitions.size(); i++) {
-          //  String a = definitions.get(i);
-          //  System.out.println(a);
-        }
-        System.out.println("taskComplete: "+newMemoKey);
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("latestMemoKey", newMemoKey);
-        editor.apply();
-
-
-        Intent intent = new Intent(getApplicationContext(), VocabListActivity.class);
-        intent.putExtra("words", words);
-        intent.putExtra("definitions", definitions);
-        intent.putExtra("mode_vocab", "new_list");
-        startActivity(intent);
-    }
 
     public void onBackPressed(){
         super.onBackPressed();

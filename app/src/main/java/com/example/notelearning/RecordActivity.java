@@ -11,6 +11,7 @@ import android.speech.SpeechRecognizer;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +37,7 @@ public class RecordActivity extends AppCompatActivity {
     ImageView home;
 
     EditText title;
-   EditText contents;
+   TextView contents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class RecordActivity extends AppCompatActivity {
         finish = (FloatingActionButton) findViewById(R.id.record_finish);
         recordBtn = (FloatingActionButton) findViewById(R.id.record_start);
         reload = (FloatingActionButton) findViewById(R.id.record_reload);
-        contents = (EditText) findViewById(R.id.contents);
+        contents = (TextView) findViewById(R.id.contents);
 
 
 
@@ -228,7 +229,7 @@ public class RecordActivity extends AppCompatActivity {
                         StartRecord();
                     return; //토스트 메세지 출력 X
                 case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
-                    message = "RECOGNIZER가 Busy";
+                    message = "RECOGNIZER is busy";
                     break;
                 case SpeechRecognizer.ERROR_SERVER:
                     message = "Server Error";
@@ -252,6 +253,7 @@ public class RecordActivity extends AppCompatActivity {
             //인식 결과
             String newText = "";
             for (int i = 0; i < matches.size(); i++) {
+                System.out.println("matched: " + matches.get(i));
                 newText += matches.get(i);
             }
 

@@ -2,19 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-
-
     <item
-        android:id="@+id/vocab_list"
-        android:enabled="true"
-        android:icon="@drawable/book"
-        android:title="Vocab List"
-        app:showAsAction="always"/>
-
-
-
-    <item
-        android:id="@+id/ummy1"
+        android:id="@+id/dummy"
         android:enabled="false"
         android:icon="@drawable/transparent_dummy"
         app:showAsAction="always"
@@ -28,7 +17,7 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/ummdy1"
+        android:id="@+id/dummy1"
         android:enabled="false"
         android:icon="@drawable/transparent_dummy"
         app:showAsAction="always"
@@ -44,7 +33,7 @@
 
 
     <item
-        android:id="@+id/dumm1"
+        android:id="@+id/dummy2"
         android:enabled="false"
         android:icon="@drawable/transparent_dummy"
         app:showAsAction="always"
@@ -60,7 +49,7 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/umdmy1"
+        android:id="@+id/dummy3"
         android:enabled="false"
         android:icon="@drawable/transparent_dummy"
         app:showAsAction="always"

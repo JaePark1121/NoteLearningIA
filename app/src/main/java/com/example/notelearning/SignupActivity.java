@@ -27,7 +27,7 @@ import java.util.HashMap;
 public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
-    EditText mEmailText, mEmailcheckText, mPasswordText, mPasswordcheckText, mName;
+    EditText mEmailText, mPasswordText, mPasswordcheckText, mName;
     Button mregisterBtn;
     private FirebaseAuth firebaseAuth;
 
@@ -47,14 +47,8 @@ public class SignupActivity extends AppCompatActivity {
 
 
         Button signup = (Button) findViewById(R.id.signup_button);
-       /* signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-*/
+
+
         //파이어베이스 접근 설정
         // user = firebaseAuth.getCurrentUser();
         firebaseAuth =  FirebaseAuth.getInstance();
@@ -104,16 +98,17 @@ public class SignupActivity extends AppCompatActivity {
                                 hashMap.put("email",email);
                                 hashMap.put("name",name);
 
-                                HashMap<String,String> hashMap2 = new HashMap<>();
-                                hashMap2.put("Home", "0");
-                                hashMap2.put("Bookmark", "0");
+                                //creating hashmap for table for the tabs inside 'folder'
+                                HashMap<String,String> hashMapFolder = new HashMap<>();
+                                hashMapFolder.put("Home", "0");
+                                hashMapFolder.put("Bookmark", "0");
 
 
 
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference reference = database.getReference("Users");
                                 reference.child(uid).setValue(hashMap);
-                                reference.child(uid).child("folder").setValue(hashMap2);
+                                reference.child(uid).child("folder").setValue(hashMapFolder);
 
                                 Toast.makeText(SignupActivity.this, "Signup Successful.", Toast.LENGTH_SHORT).show();
 
@@ -133,7 +128,7 @@ public class SignupActivity extends AppCompatActivity {
                     });
 
 
-                    //비밀번호 오류시
+                    //if password is incorrect
                 }else{
 
                     Toast.makeText(SignupActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
@@ -147,3 +142,6 @@ public class SignupActivity extends AppCompatActivity {
 
 }
 
+//Source: https://hanyeop.tistory.com/154
+
+//Source: https://firebase.google.com/docs/auth/android/start?hl=ko

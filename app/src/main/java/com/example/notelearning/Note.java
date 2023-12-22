@@ -9,9 +9,6 @@ public class Note {
         this.title = title;
         this.date = date;
         this.isBookmarked = isBookmarked;
-
-
-
     }
 
     public String getTitle() {return title;}
@@ -25,8 +22,6 @@ public class Note {
     public void setBookmarked(boolean bookmarked) {
         isBookmarked = bookmarked;
     }
-
-
 
 
 

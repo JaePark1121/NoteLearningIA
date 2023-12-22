@@ -1,5 +1,6 @@
 package com.example.notelearning;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -34,7 +36,6 @@ public class MainRecyclerFragment extends Fragment{
     static int uidIndex;
 
     private View v;
-    private FloatingActionButton record;
     static NoteAdapter adapter = new NoteAdapter();
 
     static Toolbar toolbar;
@@ -53,6 +54,7 @@ public class MainRecyclerFragment extends Fragment{
         recordButton = v.findViewById(R.id.record_button_recycler);
         recordButton.setVisibility(View.VISIBLE);
 
+
         TextView notebook = v.findViewById(R.id.notebook_box);
 
         toolbar = v.findViewById(R.id.toolbar);
@@ -62,24 +64,8 @@ public class MainRecyclerFragment extends Fragment{
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int itemId = item.getItemId();
-               if (itemId == R.id.vocab_list) {
-                    // Do something for "vocab_list" selection
-                   memoUID = adapter.getSelectedMemoUIDs();
-                   for(int i = 0; i < memoUID.size(); i++){
-                       System.out.println("Before:" + " " + memoUID.get(i));
-                   }
-                   System.out.println(memoUID.size());
 
-                   uidIndex = memoUID.size()-1;
-                    Intent intent = new Intent(getActivity(), VocabListActivity.class);
-                    intent.putExtra("memoUID", NoteAdapter.noteKeys.get(NoteAdapter.selected.get(0)));
-
-                   intent.putExtra("mode_vocab", "old_list");
-                  // memoUID.clear();
-
-                   startActivity(intent);
-                    return true;
-                } else if (itemId == R.id.delete) {
+             if (itemId == R.id.delete) {
                     ConfirmDeleteFragment confirmDeleteFragment = new ConfirmDeleteFragment();
                     FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 
@@ -95,14 +81,7 @@ public class MainRecyclerFragment extends Fragment{
                     };
                     return true;
                 }
-               else if(itemId == R.id.summary){
-                   Intent intent = new Intent(getActivity(), SummaryActivity.class);
 
-                   intent.putExtra("mode_summary", "old_summary");
-
-                   startActivity(intent);
-                   return true;
-               }
                 else if (itemId == R.id.move_folder) {
                    ChangeFolderFragment changeFolderFragment = new ChangeFolderFragment();
                    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
@@ -187,14 +166,14 @@ public class MainRecyclerFragment extends Fragment{
 
 
 
-        record = (FloatingActionButton) v.findViewById(R.id.record_button_recycler); //fragment에서 findViewByid는 view.을 이용해서 사용
+          recordButton = (FloatingActionButton) v.findViewById(R.id.record_button_recycler); //fragment에서 findViewByid는 view.을 이용해서 사용
 
-        record.setOnClickListener(new View.OnClickListener() {
+        recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),RecordActivity.class); //fragment라서 activity intent와는 다른 방식
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+
+                showNewNotesChoiceDialog();
+
             }
         });
 
@@ -233,6 +212,36 @@ public class MainRecyclerFragment extends Fragment{
                     .addValueEventListener(eventListener);
         }
     }
+
+    private void showNewNotesChoiceDialog () {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext()); // Apply the custom style
+        builder.setTitle("Notes Options");
+
+        // Set up the buttons
+        builder.setPositiveButton("Voice Record", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getActivity(), RecordActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("mode", "record");
+                startActivity(intent);
+            }
+        });
+
+        builder.setNegativeButton("Notes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getActivity(), SaveAudioActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("mode", "notes");
+                startActivity(intent);
+            }
+        });
+        builder.show();
+
+    }
+
 
 
 

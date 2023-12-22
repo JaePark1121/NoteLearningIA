@@ -20,7 +20,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:clickable="true"
-        android:src="@drawable/microphone"
+        android:src="@drawable/plus"
         app:backgroundTint="#61dfe3"
         app:fabCustomSize="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,10 +36,11 @@
         android:id="@+id/toolbar"
         android:layout_width="411dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
 
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
     <androidx.fragment.app.FragmentContainerView

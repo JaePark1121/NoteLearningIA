@@ -34,7 +34,7 @@ public class DeleteTabFragment extends Fragment {
                 mDatabase.child("Users").child(MainActivity.uid).child("folder")
                         .child(MainActivity.curTab).setValue(null);
 
-                getActivity().getSupportFragmentManager().beginTransaction().remove(MainActivity.newFragment3).commitAllowingStateLoss();
+                getActivity().getSupportFragmentManager().beginTransaction().remove(MainActivity.deleteTabFragment).commitAllowingStateLoss();
 
 
 
@@ -44,7 +44,7 @@ public class DeleteTabFragment extends Fragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            getActivity().getSupportFragmentManager().beginTransaction().remove(MainActivity.newFragment3).commitAllowingStateLoss();
+            getActivity().getSupportFragmentManager().beginTransaction().remove(MainActivity.deleteTabFragment).commitAllowingStateLoss();
         }
         });
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Use Widget.Button.Borderless.Colored for AppCompat themes -->
+        <item name="buttonBarButtonStyle">@style/CenteredButton</item>
+        <!-- Use android:buttonBarButtonStyle for other themes -->
+    </style>
+
+    <style name="CenteredButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+    </style>
+
+
+</resources>

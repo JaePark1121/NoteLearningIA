@@ -27,20 +27,17 @@ public class MainActivity extends AppCompatActivity {
     public TabLayout tabLayout;
     private FragmentTransaction transaction;
 
-    private FragmentTransaction transaction2;
-
     private FragmentTransaction transaction3;
 
     private FragmentTransaction transaction4;
 
 
 
-    public static AddTabFragment newFragment;
-    public static MainSearchFragment newFragment2;
+    public static AddTabFragment addTabFragment;
 
-    public static DeleteTabFragment newFragment3;
+    public static DeleteTabFragment deleteTabFragment;
 
-    public static LogOutFragment newFragment4;
+    public static LogOutFragment logOutFragment;
 
     public static String uid;
     public static String curTab=null;
@@ -91,19 +88,18 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView home = (ImageView) findViewById(R.id.home_icon);
         ImageButton add = (ImageButton) findViewById(R.id.add_tab_btn);
-        ImageView search = (ImageView) findViewById(R.id.search_icon);
         ImageView logoutBtn = (ImageView) findViewById(R.id.LogoutBtn);
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 transaction4 = getSupportFragmentManager().beginTransaction();
-                newFragment4 = new LogOutFragment();
-                transaction4.add(R.id.LogoutContainer, newFragment4);
-                newFragment4.listener = new View.OnClickListener() {
+                logOutFragment = new LogOutFragment();
+                transaction4.add(R.id.LogoutContainer, logOutFragment);
+                logOutFragment.listener = new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        getSupportFragmentManager().beginTransaction().remove(newFragment4).commitAllowingStateLoss();
+                        getSupportFragmentManager().beginTransaction().remove(logOutFragment).commitAllowingStateLoss();
                     }
                 };
                 transaction4.commit();
@@ -125,24 +121,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 transaction = getSupportFragmentManager().beginTransaction();
-                newFragment = new AddTabFragment();
-                transaction.add(R.id.new_tab_container, newFragment);
+                addTabFragment = new AddTabFragment();
+                transaction.add(R.id.new_tab_container, addTabFragment);
                 transaction.commit();
                 //tabLayout.addTab(tabLayout.newTab().setText("New"));
 
             }
         });
 
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("search click");
-                transaction2 = getSupportFragmentManager().beginTransaction();
-                newFragment2 = new MainSearchFragment(); // create instance of MainSearchFragment instead of AddTabFragment
-                transaction2.add(R.id.main_search_container, newFragment2); // use newFragment2 here instead of newFragment
-                transaction2.commit();
-            }
-        });
 
 
 
@@ -195,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            // Unfortunately, you can't get the View directly, so you need to loop through the ViewGroup
+            // Chat GPT: Unfortunately, you can't get the View directly, so you need to loop through the ViewGroup
             ViewGroup tabViewGroup = (ViewGroup) tabLayout.getChildAt(0);
             View tabView = tabViewGroup.getChildAt(i);
             if (tabView != null) {
@@ -206,8 +192,8 @@ public class MainActivity extends AppCompatActivity {
                         if (!MainActivity.curTab.equals("Home") && !MainActivity.curTab.equals("Bookmark")) {
 
                             transaction3 = getSupportFragmentManager().beginTransaction();
-                            newFragment3 = new DeleteTabFragment();
-                            transaction3.add(R.id.delete_tab_container, newFragment3);
+                            deleteTabFragment = new DeleteTabFragment();
+                            transaction3.add(R.id.delete_tab_container, deleteTabFragment);
                             transaction3.commit();
 
                         }
